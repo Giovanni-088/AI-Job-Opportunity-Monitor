@@ -71,6 +71,8 @@ Supported platforms include:
 * Computrabajo
 * LinkedIn
 * OCC Mundial
+* Remote OK
+* Wellfound
 * Additional providers through generic parsing logic
 
 ---

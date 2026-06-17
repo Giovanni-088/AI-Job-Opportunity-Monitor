@@ -1,0 +1,125 @@
+Email data:
+Subject: {{ $json.subject }}
+From: {{ $json.from }}
+Date: {{ $json.date }}
+Source: {{ $json.source }}
+Clean text: {{ $json.cleanText }}
+
+Current extracted values:
+Job Title: {{ $json.job_title }}
+Company: {{ $json.company }}
+Apply URL: {{ $json.applyUrl }}
+Score: {{ $json.score }}
+Matched Keywords: {{ JSON.stringify($json.matchedKeywords) }}
+
+Instructions:
+
+1. Determine if this email contains a real job opportunity.
+
+2. If not, return "is_job_opportunity": false.
+
+3. Confirm or correct ONLY:
+
+   * job_title
+   * company
+   * location
+3.1 JOB TITLE EXTRACTION RULES (VERY IMPORTANT)
+
+The email subject is NOT necessarily the job title.
+
+Priority order:
+
+1. Extract the job title from the job listing itself.
+2. Extract the job title from the vacancy card.
+3. Extract the job title immediately before the company name.
+4. Use the subject ONLY if no other job title exists.
+
+Ignore generic alert names such as:
+
+- desarrollador jr
+- developer
+- software engineer
+- empleo guardado
+- alerta de empleo
+- nuevas vacantes
+- jobs matching your search
+- recommendations
+- suggested jobs
+- job alert
+
+If the content contains:
+
+"IT Business Analyst (Jr/Mid) Bosonit MX"
+
+Then:
+
+job_title = "IT Business Analyst (Jr/Mid)"
+company = "Bosonit MX"
+
+Never use alert titles as job titles when a more specific vacancy title exists in the email body.
+3.2 If multiple jobs exist in the email:
+
+Return ONLY the FIRST featured job opportunity.
+
+Ignore secondary recommendations.
+Ignore related jobs.
+Ignore suggested jobs.
+Ignore jobs that appear after sections such as:
+
+- Empleos que podrían gustarte
+- Similar jobs
+- Recommended jobs
+- Suggested jobs
+- Related opportunities
+4. DO NOT modify, rewrite, shorten, decode or invent application_url.
+
+5. Use EXACTLY this URL:
+   {{ $json.applyUrl }}
+
+6. Detect language:
+
+   * "es"
+   * "en"
+
+7. If content contains:
+
+   * trabajo desde casa
+   * home office
+   * remoto
+   * remote
+
+   then location = "Remoto"
+
+8. Copy score "{{ $json.score }}" EXACTLY from input. DO NOT CREATE IT YOURSELF.
+
+9. Copy matchedKeywords "{{ $json.matchedKeywords }}" EXACTLY from input. DO NOT MODIFY.
+
+10. Copy from "{{ $json.from }}" and source "{{ $json.source }}"EXACTLY from input.
+
+11. If a value cannot be determined, return null.
+
+12. Return ONLY valid JSON.
+
+13. No markdown.
+
+14. No explanations.
+
+15. No code fences.
+
+16. First character must be {
+
+17. Last character must be }
+
+Output schema:
+
+{
+"is_job_opportunity": true,
+"job_title": "",
+"company": "",
+"location": "",
+"language": "",
+"application_url": "",
+"score": 0,
+"matchedKeywords": [],
+"from": ""
+}

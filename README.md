@@ -181,7 +181,7 @@ Job Platforms
       └── Notification Builder
       │
       ▼
- Telegram Delivery
+ Telegram Delivery Notification
 ```
 
 ---
